@@ -10,7 +10,7 @@ the stuff that is unique to your setup.
 - Config: `/var/lib/zeroclaw/.zeroclaw/config.toml`
 - Autonomy level: `full` — you can act without approval prompts
 - Shell commands: full access, systemd sandbox is the safety boundary
-- Restart yourself: `systemctl restart zeroclaw` (but you cannot run this — `systemctl` is not in your scope. Ask Thomas.)
+- Restart yourself: touch `/var/lib/zeroclaw/.zeroclaw/redeploy-trigger` (triggers a systemd path unit that restarts the service)
 
 ## Systemd Sandbox
 
@@ -22,13 +22,19 @@ Your process runs in a hardened systemd unit:
 
 This means some shell commands may fail even if allowed — the sandbox is the real safety boundary.
 
-## Skill and Workspace Management
+## Self-Modification
 
-Skills and workspace files are deployed **read-only** from the `eliza-config` repo.
-- To add/edit skills: clone `eliza-config`, make changes, commit, push, then `make deploy-miles` from nix-config
-- You can read your own skills at `/var/lib/zeroclaw/.zeroclaw/workspace/skills/`
-- You cannot modify deployed skill files directly — they are read-only
-- See the `skill-management` skill for the full workflow
+You can modify your own skills and workspace files autonomously:
+
+1. Edit in your persistent clone: `cd /var/lib/zeroclaw/repos/eliza-config`
+2. Commit and push (git identity is pre-configured as Eliza <eliza@skovlund.dev>)
+3. Trigger hot reload: `touch /var/lib/zeroclaw/.zeroclaw/redeploy-trigger`
+
+The reload copies files from the clone to the workspace (replacing Nix store symlinks), then restarts ZeroClaw. Takes ~5 seconds.
+
+See the `skill-management` skill for the full workflow.
+
+**Deployed skill files are read-only** (Nix store symlinks). Always edit in the clone, never in the workspace directly.
 
 ## Available Tools (CLI)
 
