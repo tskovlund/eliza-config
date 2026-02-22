@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+# Pre-commit: validate skill structure
+set -euo pipefail
+
+errors=0
+
+for dir in skills/*/; do
+  [ -d "$dir" ] || continue
+  skill_name=$(basename "$dir")
+
+  if [ ! -f "$dir/SKILL.md" ]; then
+    echo "ERROR: $dir is missing SKILL.md"
+    errors=$((errors + 1))
+  fi
+done
+
+if [ $errors -gt 0 ]; then
+  echo "$errors skill(s) have issues. Fix before committing."
+  exit 1
+fi

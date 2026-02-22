@@ -1,0 +1,51 @@
+name: Check
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate SKILL.md files exist
+        run: |
+          errors=0
+          for dir in skills/*/; do
+            skill_name=$(basename "$dir")
+            if [ ! -f "$dir/SKILL.md" ]; then
+              echo "ERROR: $dir is missing SKILL.md"
+              errors=$((errors + 1))
+            fi
+          done
+          if [ $errors -gt 0 ]; then
+            echo "$errors skill(s) missing SKILL.md"
+            exit 1
+          fi
+          echo "All skills have SKILL.md"
+
+      - name: Validate workspace files exist
+        run: |
+          for file in SOUL.md IDENTITY.md AGENTS.md TOOLS.md USER.md; do
+            if [ ! -f "workspace/$file" ]; then
+              echo "ERROR: workspace/$file is missing"
+              exit 1
+            fi
+          done
+          echo "All workspace files present"
+
+      - name: Check for empty files
+        run: |
+          errors=0
+          for f in $(find skills/ workspace/ -name '*.md' -empty); do
+            echo "ERROR: $f is empty"
+            errors=$((errors + 1))
+          done
+          if [ $errors -gt 0 ]; then
+            exit 1
+          fi
+          echo "No empty files"

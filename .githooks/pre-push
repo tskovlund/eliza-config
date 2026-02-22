@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+# Pre-push: full validation
+set -euo pipefail
+
+echo "Validating skills..."
+
+errors=0
+
+for dir in skills/*/; do
+  [ -d "$dir" ] || continue
+  skill_name=$(basename "$dir")
+
+  if [ ! -f "$dir/SKILL.md" ]; then
+    echo "ERROR: $skill_name missing SKILL.md"
+    errors=$((errors + 1))
+    continue
+  fi
+
+  # Check SKILL.md is non-empty
+  if [ ! -s "$dir/SKILL.md" ]; then
+    echo "ERROR: $skill_name SKILL.md is empty"
+    errors=$((errors + 1))
+  fi
+done
+
+echo "Validating workspace files..."
+
+for file in SOUL.md IDENTITY.md AGENTS.md TOOLS.md USER.md; do
+  if [ ! -f "workspace/$file" ]; then
+    echo "ERROR: workspace/$file is missing"
+    errors=$((errors + 1))
+  fi
+done
+
+if [ $errors -gt 0 ]; then
+  echo "$errors issue(s) found. Fix before pushing."
+  exit 1
+fi
+
+echo "All checks passed."
