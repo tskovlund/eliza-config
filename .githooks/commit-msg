@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+# Enforce conventional commits
+set -euo pipefail
+
+commit_msg_file="$1"
+commit_msg=$(head -1 "$commit_msg_file")
+
+# Conventional commit pattern: type(scope): description
+# Types: feat, fix, docs, chore, refactor, style, test, ci
+pattern='^(feat|fix|docs|chore|refactor|style|test|ci)(\(.+\))?: .+'
+
+if ! echo "$commit_msg" | grep -qE "$pattern"; then
+  echo "ERROR: Commit message must follow Conventional Commits format."
+  echo "  Format: type(scope): description"
+  echo "  Types: feat, fix, docs, chore, refactor, style, test, ci"
+  echo "  Example: feat(skills): add morning-briefing skill"
+  echo ""
+  echo "  Got: $commit_msg"
+  exit 1
+fi

@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+# Pre-commit: validate encrypted skill/workspace structure
+set -euo pipefail
+
+errors=0
+
+# Check secrets.nix exists
+if [ ! -f "secrets/secrets.nix" ]; then
+  echo "ERROR: secrets/secrets.nix is missing"
+  errors=$((errors + 1))
+fi
+
+# Check all expected .age files exist and are non-empty
+for age_file in secrets/*.age; do
+  [ -f "$age_file" ] || continue
+  if [ ! -s "$age_file" ]; then
+    echo "ERROR: $age_file is empty"
+    errors=$((errors + 1))
+  fi
+done
+
+if [ $errors -gt 0 ]; then
+  echo "$errors issue(s) found. Fix before committing."
+  exit 1
+fi

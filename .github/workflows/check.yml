@@ -1,0 +1,58 @@
+name: Check
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Validate secrets.nix exists
+        run: |
+          if [ ! -f "secrets/secrets.nix" ]; then
+            echo "ERROR: secrets/secrets.nix is missing"
+            exit 1
+          fi
+          echo "secrets.nix present"
+
+      - name: Validate encrypted skill files
+        run: |
+          errors=0
+          for skill in delegation docs linear-operations memory-management morning-briefing \
+                       notification-routing pr-review self-improvement skill-management system-health; do
+            if [ ! -f "secrets/skill-${skill}.age" ]; then
+              echo "ERROR: secrets/skill-${skill}.age is missing"
+              errors=$((errors + 1))
+            elif [ ! -s "secrets/skill-${skill}.age" ]; then
+              echo "ERROR: secrets/skill-${skill}.age is empty"
+              errors=$((errors + 1))
+            fi
+          done
+          if [ $errors -gt 0 ]; then
+            echo "$errors skill(s) have issues"
+            exit 1
+          fi
+          echo "All skill secrets present"
+
+      - name: Validate encrypted workspace files
+        run: |
+          errors=0
+          for file in AGENTS IDENTITY SOUL TOOLS USER; do
+            if [ ! -f "secrets/workspace-${file}.age" ]; then
+              echo "ERROR: secrets/workspace-${file}.age is missing"
+              errors=$((errors + 1))
+            elif [ ! -s "secrets/workspace-${file}.age" ]; then
+              echo "ERROR: secrets/workspace-${file}.age is empty"
+              errors=$((errors + 1))
+            fi
+          done
+          if [ $errors -gt 0 ]; then
+            echo "$errors workspace file(s) have issues"
+            exit 1
+          fi
+          echo "All workspace secrets present"

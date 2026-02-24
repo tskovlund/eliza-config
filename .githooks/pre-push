@@ -1,0 +1,43 @@
+#!/usr/bin/env bash
+# Pre-push: full validation of encrypted secrets
+set -euo pipefail
+
+echo "Validating encrypted secrets..."
+
+errors=0
+
+# Expected skill files
+for skill in delegation docs linear-operations memory-management morning-briefing \
+             notification-routing pr-review self-improvement skill-management system-health; do
+  if [ ! -f "secrets/skill-${skill}.age" ]; then
+    echo "ERROR: secrets/skill-${skill}.age is missing"
+    errors=$((errors + 1))
+  elif [ ! -s "secrets/skill-${skill}.age" ]; then
+    echo "ERROR: secrets/skill-${skill}.age is empty"
+    errors=$((errors + 1))
+  fi
+done
+
+# Expected workspace files
+for file in AGENTS IDENTITY SOUL TOOLS USER; do
+  if [ ! -f "secrets/workspace-${file}.age" ]; then
+    echo "ERROR: secrets/workspace-${file}.age is missing"
+    errors=$((errors + 1))
+  elif [ ! -s "secrets/workspace-${file}.age" ]; then
+    echo "ERROR: secrets/workspace-${file}.age is empty"
+    errors=$((errors + 1))
+  fi
+done
+
+# Check secrets.nix
+if [ ! -f "secrets/secrets.nix" ]; then
+  echo "ERROR: secrets/secrets.nix is missing"
+  errors=$((errors + 1))
+fi
+
+if [ $errors -gt 0 ]; then
+  echo "$errors issue(s) found. Fix before pushing."
+  exit 1
+fi
+
+echo "All checks passed."
