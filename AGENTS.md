@@ -1,4 +1,4 @@
-# CLAUDE.md — eliza-config
+# AGENTS.md — eliza-config
 
 Follow the code standards in [CONVENTIONS.md](CONVENTIONS.md).
 
