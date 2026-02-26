@@ -1,5 +1,7 @@
 # CLAUDE.md — eliza-config
 
+Follow the code standards in [CONVENTIONS.md](CONVENTIONS.md).
+
 ## Overview
 
 Configuration repository for Eliza (ZeroClaw AI assistant) running on the `miles` VPS. Contains skills, workspace files, and personality configuration — all agenix-encrypted. Deployed declaratively via `make deploy-miles` in nix-config.
