@@ -36,3 +36,7 @@ agenix -e secrets/skill-delegation.age   # opens in $EDITOR, re-encrypts on save
 ```sh
 nix develop   # or: direnv allow
 ```
+
+## Author
+
+Thomas Skovlund Hansen — [thomas@skovlund.dev](mailto:thomas@skovlund.dev)
