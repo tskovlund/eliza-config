@@ -89,12 +89,6 @@ The age key and binary are deployed to `/var/lib/zeroclaw/` by the `zeroclaw-set
 - `nix develop` — enter dev shell (taplo for TOML linting)
 - Git hooks validate encrypted file structure on commit and push
 
-## Git workflow
-
-- Direct to main for content tweaks
-- Branch + PR for new skills or structural changes
-- Conventional commits: `feat(secrets): add morning-briefing skill`
-
 ## Style
 
 - Skills should be concise and actionable — Eliza reads these as system prompt fragments
