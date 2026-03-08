@@ -25,7 +25,8 @@ jobs:
           errors=0
           for skill in delegation dep-update docs linear-operations memory-management \
                        morning-briefing notification-routing onboard pr-review repo-sync \
-                       self-improvement skill-management system-health test-write; do
+                       self-improvement skill-management system-health task-lifecycle \
+                       test-write; do
             if [ ! -f "skills/${skill}/SKILL.md" ]; then
               echo "ERROR: skills/${skill}/SKILL.md is missing"
               errors=$((errors + 1))
