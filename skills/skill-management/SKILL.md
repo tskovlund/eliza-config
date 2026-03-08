@@ -11,9 +11,9 @@ Create, update, and manage your own skill library. Skills live in the `eliza-con
 
 ## Understanding the architecture
 
-- Skills live in `github.com/tskovlund/eliza-config` under `skills/<name>/SKILL.md`
+- Skills live in the `eliza-config` repo under `skills/<name>/SKILL.md`
 - Deployed to `/var/lib/zeroclaw/.zeroclaw/workspace/skills/` via nix-config
-- **Deployed files are READ-ONLY** (Nix store symlinks) — you cannot edit them in place
+- **Deployed files are READ-ONLY** (Nix store symlinks) -- you cannot edit them in place
 - To modify: use the persistent clone, edit, commit, push, then trigger a hot reload
 
 ## Self-modification workflow
@@ -57,15 +57,34 @@ How to present results
 - Context details
 ```
 
-Key principles:
-- Be specific and actionable — this is loaded into your system prompt
-- Reference actual commands and paths (you run on miles)
-- Keep it concise — every token counts
-- Include output format for Telegram readability
+### Naming convention
+
+Follow `skill-<topic>-<action>` or `skill-<topic>` pattern. Group related skills by topic prefix:
+
+- `skill-linear-operations` (topic: linear)
+- `skill-memory-management` (topic: memory)
+- `skill-pr-review` (topic: pr)
+- `skill-self-improvement` (topic: self)
+- `skill-skill-management` (topic: skill)
+- `skill-docs` (topic: docs)
+
+### Quality checklist
+
+Before committing, verify:
+- [ ] SKILL.md exists and is non-empty
+- [ ] Has clear "When to use" section with trigger phrases
+- [ ] Steps are concrete (actual commands, not hand-wavy instructions)
+- [ ] Output format is defined (Telegram-friendly)
+- [ ] No secrets or sensitive data in the skill file
+- [ ] Notes section covers edge cases and known limitations
+- [ ] Instructions are specific and actionable (commands, not vibes)
+- [ ] At least 1-2 worked examples or concrete scenarios
+- [ ] Error handling for known failure modes
+- [ ] Cross-references to related skills where natural
 
 ### 4. Commit and push
 
-Your git identity is pre-configured (Eliza <eliza@skovlund.dev>).
+Your git identity is pre-configured. Commits sign automatically.
 
 ```bash
 cd /var/lib/zeroclaw/repos/eliza-config
@@ -91,19 +110,30 @@ Wait ~5 seconds, then verify the change is live by reading the deployed skill fi
 
 1. `cd /var/lib/zeroclaw/repos/eliza-config && git pull origin main`
 2. Edit the skill's SKILL.md
-3. `git commit -m "fix(skills): update <skill-name> — <what changed>"`
+3. `git commit -m "fix(skills): update <skill-name> -- <what changed>"`
 4. `git push origin main`
 5. `touch /var/lib/zeroclaw/.zeroclaw/redeploy-trigger`
 
-## Skill quality checklist
+## When to consider new skills
 
-Before committing, verify:
-- [ ] SKILL.md exists and is non-empty
-- [ ] Has clear "When to use" section with trigger phrases
-- [ ] Steps are concrete (actual commands, not hand-wavy instructions)
-- [ ] Output format is defined (Telegram-friendly)
-- [ ] No secrets or sensitive data in the skill file
-- [ ] Notes section covers edge cases and known limitations
+**After completing a task:** Did I follow a repeatable workflow that isn't yet a skill?
+- Multi-step process I'd do the same way next time
+- Specific tools in a specific order
+
+**After struggling with a task:** Would a skill have helped?
+- Had to search for conventions that should be readily available
+- Made a mistake that instructions would have prevented
+
+## Direct corrections vs proposals
+
+**Direct corrections -- apply immediately:**
+When Thomas corrects behavior ("you should have done X"), this is implicit approval. Update the skill and briefly confirm what changed.
+
+**New skills and major redesigns -- propose first:**
+For speculative new skills or architectural changes, propose: name, purpose, outline. Create after approval.
+
+**Edge case fixes -- use judgment:**
+Obvious, low-risk fixes: apply and mention. Behavior-changing fixes: propose first.
 
 ## Workspace files
 
@@ -113,8 +143,12 @@ Workspace files (SOUL.md, IDENTITY.md, etc.) follow the same workflow:
 
 ## Notes
 
-- Don't try to edit deployed skill files — they're read-only Nix store symlinks
+- Don't try to edit deployed skill files -- they're read-only Nix store symlinks
 - The git workflow ensures all changes are tracked and reviewable
 - If you're unsure whether a change is appropriate, propose it to Thomas first
-- SKILL.toml is optional — ZeroClaw extracts metadata from SKILL.md headers
-- The hot reload replaces Nix store symlinks with real files — the next `make deploy-miles` reconciles them back to symlinks
+- SKILL.toml is optional -- ZeroClaw extracts metadata from SKILL.md headers
+- The hot reload replaces Nix store symlinks with real files -- the next `make deploy-miles` reconciles them back to symlinks
+
+## Cross-references
+
+Claude Code counterparts: `/skill-add`, `/skill-update`, `/skill-write`

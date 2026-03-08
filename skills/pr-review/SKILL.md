@@ -1,6 +1,6 @@
 # PR Review
 
-Full pull request lifecycle: create a PR, spawn independent reviewer agents, address feedback, iterate until clean, and merge.
+Full pull request lifecycle: create a PR, review it, address feedback, iterate until clean, and merge.
 
 ## When to use
 
@@ -21,52 +21,97 @@ Full pull request lifecycle: create a PR, spawn independent reviewer agents, add
 
 3. **Wait for CI**: `gh pr checks <number> --watch`
 
-## Self-Review Process
+## Review Process
 
-After creating the PR, review it yourself first:
+### 1. Gather PR context
 
-1. **Read the full diff**: `gh pr diff <number>`
+```sh
+gh pr view <number>
+gh pr diff <number>
+gh pr diff <number> --name-only
+gh pr checks <number>
+gh pr view <number> --comments
+```
 
-2. **Check for**:
-   - Dead code, debug prints, TODOs
-   - Missing error handling at system boundaries
-   - Naming consistency with the repo's conventions
-   - Security issues (hardcoded secrets, injection vectors)
-   - Missing tests for new functionality
+### 2. Understand the change
 
-3. **Post review comments** on specific lines if issues found:
-   ```
-   gh api repos/<owner>/<repo>/pulls/<number>/comments -f body="<comment>" -f path="<file>" -f line=<n> -f side="RIGHT" -f commit_id="$(gh pr view <number> --json headRefOid -q .headRefOid)"
-   ```
+- Read PR description for intent
+- Read linked issues for requirements
+- Identify scope: which files, which subsystem
+- Read surrounding code in modified files for context
+
+### 3. Analyze the diff
+
+For each changed file, assess:
+
+- **Correctness** -- logic errors, off-by-one, race conditions, edge cases, error paths
+- **Security** -- injection, path traversal, secrets, overly permissive permissions
+- **Style/conventions** -- repo patterns, naming, structure (check CLAUDE.md and CONVENTIONS.md)
+- **Completeness** -- docs updated, tests added, TODOs justified
+- **Simplicity** -- over-engineering, unnecessary abstractions
+
+### 4. Post review comments
+
+Use severity levels to classify findings:
+
+- **Bug:** -- correctness issue causing wrong behavior
+- **Security:** -- potential vulnerability
+- **Nit:** -- style/preference, non-blocking
+- **Question:** -- need clarification
+- **Suggestion:** -- improvement idea, non-blocking
+
+Post as a **COMMENT review** (not APPROVE/REQUEST_CHANGES -- GitHub blocks these for self-review).
+
+```sh
+gh api repos/<owner>/<repo>/pulls/<number>/comments -f body="<comment>" -f path="<file>" -f line=<n> -f side="RIGHT" -f commit_id="$(gh pr view <number> --json headRefOid -q .headRefOid)"
+```
+
+### Review comment guidelines
+
+- Be specific -- point to exact lines, explain consequences
+- Distinguish blocking (Bug, Security) from non-blocking (Nit, Suggestion)
+- Offer fixes -- use GitHub suggestion syntax where applicable
+- One concern per comment
+- Acknowledge good work when warranted
 
 ## Spawning Independent Reviewers
 
 For significant PRs, delegate review to fresh-context sub-agents:
 
-1. **Delegate a code review agent**:
-   - Use the `delegate` tool to spawn a sub-agent
-   - Give it the PR number, repo, and a focused review mandate
-   - Example: "Review PR #42 in tskovlund/nix-config for correctness, style, and security. Post comments on GitHub."
+1. **Delegate a code review agent** -- give it the PR number, repo, and a focused review mandate
+2. **Delegate a second reviewer** (for critical PRs) -- different focus: architecture, performance, or user impact
+3. **Collect feedback**: `gh api repos/<owner>/<repo>/pulls/<number>/comments`
 
-2. **Delegate a second reviewer** (for critical PRs):
-   - Different focus: architecture, performance, or user impact
-   - Fresh context prevents groupthink
+## Addressing Feedback (pr-fix)
 
-3. **Collect feedback**:
-   - Read all review comments: `gh api repos/<owner>/<repo>/pulls/<number>/comments`
-   - Read PR review summaries: `gh pr review list <number>`
+**Every comment gets an explicit reply** -- an unaddressed comment looks identical to an ignored comment.
 
-## Addressing Feedback
+For each comment, do BOTH:
+1. **Act on it**: Fix the code, or decline with an explanation
+2. **Reply on GitHub**:
+   ```sh
+   gh api "repos/{owner}/{repo}/pulls/{number}/comments/{comment_id}/replies" \
+     -f body="Fixed -- renamed to avoid shadowing"
+   ```
 
-1. **For each comment**:
-   - If valid: fix the code, push the commit, reply confirming the fix
-   - If disagree: reply with reasoning
+Keep fix commits atomic -- one fix per comment where practical.
 
-2. **Push fixes**: `git add <files> && git commit -m "fix(<scope>): address review feedback" && git push`
+## Review Loop
 
-3. **Re-check CI**: `gh pr checks <number> --watch`
+### Record comment baseline
 
-4. **If further review needed**: spawn fresh reviewer agents for round 2
+```sh
+BASELINE_ID=$(gh api "repos/{owner}/{repo}/pulls/<number>/comments" \
+  --jq '[.[].id] | max // 0')
+```
+
+### Assess and loop
+
+After addressing comments and pushing fixes:
+
+- **Another round** if: substantive bugs were fixed (fixes may introduce new issues), or significant new code was written
+- **No further round** if: only nits/suggestions, review was clean, or fixes were trivial (renames, formatting)
+- **Max rounds (5):** exit -- summarize remaining concerns
 
 ## Merge
 
@@ -78,8 +123,12 @@ Once all comments are resolved and CI passes:
 
 ## Notes
 
-- Always reply to review comments — don't leave them hanging
+- Always reply to review comments -- don't leave them hanging
 - Use squash merge to keep main history clean
-- Reviewer agents should be independent sessions (no shared context) to get genuine second opinions
-- For nix-config PRs: Copilot auto-reviews via the "Protect main" ruleset — always read those comments too
+- Reviewer agents should be independent sessions (no shared context) for genuine second opinions
+- For nix-config PRs: Copilot auto-reviews via the "Protect main" ruleset -- always read those comments too
 - This skill handles the entire lifecycle. Don't split into separate create/review/merge steps.
+
+## Cross-references
+
+Claude Code counterparts: `/pr-review`, `/pr-review-loop`, `/pr-fix`

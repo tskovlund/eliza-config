@@ -4,46 +4,41 @@ Follow the code standards in [CONVENTIONS.md](CONVENTIONS.md).
 
 ## Overview
 
-Configuration repository for Eliza (ZeroClaw AI assistant) running on the `miles` VPS. Contains skills, workspace files, and personality configuration — all agenix-encrypted. Deployed declaratively via `make deploy-miles` in nix-config.
+Configuration repository for Eliza (ZeroClaw AI assistant) running on the `miles` VPS. Contains skills (plaintext) and workspace files (agenix-encrypted). Deployed declaratively via `make deploy-miles` in nix-config.
 
 ## Structure
 
+- `skills/<name>/SKILL.md` — Plaintext skill files (no sensitive data)
 - `secrets/secrets.nix` — agenix recipient definitions (age public key)
-- `secrets/skill-<name>.age` — Encrypted skill files
-- `secrets/workspace-<NAME>.age` — Encrypted workspace identity files
+- `secrets/workspace-<NAME>.age` — Encrypted workspace identity files (personal data)
 
 ### Naming conventions
 
-- Skills: `secrets/skill-<kebab-case-name>.age` (e.g., `skill-morning-briefing.age`)
+- Skills: `skills/<kebab-case-name>/SKILL.md` (e.g., `skills/morning-briefing/SKILL.md`)
 - Workspace: `secrets/workspace-<NAME>.age` (e.g., `workspace-USER.age`)
 
 ## Encryption
 
-All skills and workspace files are agenix-encrypted (age). The same portable age key decrypts everything.
+Workspace files contain personal data and are agenix-encrypted. Skills are plaintext — they contain only generic instructions without sensitive information.
 
-### Reading a file
+### Reading a workspace file
 
 ```sh
-age -d -i ~/.config/agenix/age-key.txt secrets/skill-delegation.age
+age -d -i ~/.config/agenix/age-key.txt secrets/workspace-USER.age
 ```
 
-### Editing a file
+### Editing a workspace file
 
 ```sh
-agenix -e secrets/skill-delegation.age   # decrypts, opens $EDITOR, re-encrypts
+agenix -e secrets/workspace-USER.age   # decrypts, opens $EDITOR, re-encrypts
 ```
 
 ### Adding a new skill
 
-1. Add entry to `secrets/secrets.nix`
-2. Write the SKILL.md content and encrypt:
-   ```sh
-   age -r "$(nix eval --raw -f secrets/secrets.nix --apply 'x: builtins.head x."skill-new-name.age".publicKeys')" \
-     -o secrets/skill-new-name.age /path/to/SKILL.md
-   ```
-   Or: `agenix -e secrets/skill-new-name.age`
-3. Declare `age.secrets` in nix-config's `hosts/miles/zeroclaw.nix`
-4. Commit, push, deploy with `make deploy-miles`
+1. Create `skills/<name>/SKILL.md`
+2. Commit, push, deploy with `make deploy-miles`
+
+That's it — no encryption step needed for skills.
 
 ## Skill format
 
@@ -64,30 +59,35 @@ How to present results (compact for Telegram, emoji for scanning, etc.)
 
 ## Notes
 - Context-specific details (runs on miles, Telegram delivery, etc.)
+
+## Cross-references
+- Claude Code counterpart: `/skill-name` (if one exists)
 ```
+
+## Skill sync protocol
+
+Skills are cross-referenced with Claude Code skills in nix-config-personal. When updating a skill here, check the cross-reference and consider whether the counterpart needs a corresponding update. The platforms are genuinely different (Telegram vs terminal, HTTP API vs MCP tools) so skills diverge in implementation but should stay in sync on domain knowledge (review standards, conventions, frameworks, etc.).
 
 ## Deployment
 
-Secrets are decrypted by agenix (NixOS module) and placed at `/var/lib/zeroclaw/.zeroclaw/workspace/` on miles. nix-config's `zeroclaw.nix` declares `age.secrets` for each file.
+Skills are copied directly from `skills/` to `/var/lib/zeroclaw/.zeroclaw/workspace/skills/` on miles by the `zeroclaw-setup` service. Workspace files are decrypted by agenix.
 
-The hot-reload path (`eliza-redeploy`) decrypts `.age` files from the local clone using the age key.
+The hot-reload path (`eliza-redeploy`) copies plaintext skills from the local clone and decrypts workspace `.age` files.
 
 ## Self-modification (ZeroClaw)
 
 ZeroClaw can modify its own skills:
 
-1. Decrypt: `age -d -i <key> secrets/skill-foo.age > /tmp/skill-foo.md`
-2. Edit the plaintext
-3. Re-encrypt: `age -r <pubkey> -o secrets/skill-foo.age /tmp/skill-foo.md`
-4. Commit and push
-5. Touch redeploy trigger
+1. Edit `skills/<name>/SKILL.md` in the persistent clone
+2. Commit and push
+3. Touch redeploy trigger
 
-The age key and binary are deployed to `/var/lib/zeroclaw/` by the `zeroclaw-setup` service.
+The age key is still deployed for workspace file self-modification if needed.
 
 ## Commands
 
 - `nix develop` — enter dev shell (taplo for TOML linting)
-- Git hooks validate encrypted file structure on commit and push
+- Git hooks validate file structure on commit and push
 
 ## Style
 

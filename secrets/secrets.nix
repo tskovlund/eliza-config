@@ -16,17 +16,8 @@ let
   thomas = "age15j2yd89h8ahm93g2um8206atnfcl90hk7q062nt63xqrz57lspmsvmyzle";
 in
 {
-  # Skills
-  "skill-delegation.age".publicKeys = [ thomas ];
-  "skill-docs.age".publicKeys = [ thomas ];
-  "skill-linear-operations.age".publicKeys = [ thomas ];
-  "skill-memory-management.age".publicKeys = [ thomas ];
-  "skill-morning-briefing.age".publicKeys = [ thomas ];
-  "skill-notification-routing.age".publicKeys = [ thomas ];
-  "skill-pr-review.age".publicKeys = [ thomas ];
-  "skill-self-improvement.age".publicKeys = [ thomas ];
-  "skill-skill-management.age".publicKeys = [ thomas ];
-  "skill-system-health.age".publicKeys = [ thomas ];
+  # Skills are plaintext in skills/<name>/SKILL.md — no encryption needed.
+  # Only workspace files (personal data) remain encrypted.
 
   # Workspace
   "workspace-AGENTS.age".publicKeys = [ thomas ];

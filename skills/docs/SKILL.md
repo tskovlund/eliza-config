@@ -36,19 +36,33 @@ All documentation should map to one of these four types:
 - **Example**: "Why we use declarative deployment for skills"
 - **Verb**: Understand
 
+## Identifying the type
+
+| Reader's mode | They need | Type |
+|---------------|-----------|------|
+| Learning a new skill | A guided experience | **Tutorial** |
+| Trying to get something done | Steps to follow | **How-to guide** |
+| Looking up specific info | Facts and descriptions | **Reference** |
+| Wanting to understand | Context and reasoning | **Explanation** |
+
 ## Writing Guidelines
 
 1. **Identify the type first.** Don't mix tutorial and reference in one doc.
-
 2. **One file, one purpose.** If a doc is trying to be both a tutorial and reference, split it.
-
 3. **Use concrete examples.** Show actual commands, actual file paths, actual output.
-
 4. **No filler.** Every sentence should carry information. Cut "In this section we will discuss..."
-
 5. **Keep it current.** Outdated docs are worse than no docs. Update or delete.
-
 6. **Link, don't repeat.** Reference other docs instead of duplicating content.
+7. **Lead with the most important information.** Short sentences, short paragraphs.
+8. **Tables for structured data, code blocks for commands.**
+
+## Structural Patterns
+
+**README.md:** project name, what this is, quick start, architecture, commands
+
+**Runbook:** quick reference table, common tasks, troubleshooting, disaster recovery
+
+**Architecture doc:** overview, components, data flow, conventions
 
 ## Document Structure
 
@@ -80,9 +94,25 @@ One-line summary of what this document covers.
 ## Summary
 ```
 
+## Troubleshooting
+
+### Docs are too long
+
+**Cause:** Mixing Diataxis types in one document.
+**Solution:** Split. Tutorial shouldn't contain reference tables.
+
+### Docs go stale
+
+**Cause:** Documentation far from what it documents.
+**Solution:** Keep docs close to code. Prefer generated docs where possible.
+
 ## Notes
 
 - Thomas's repos use Conventional Commits and Markdown
-- CLAUDE.md files are a hybrid of reference + how-to — that's fine for repo instructions
+- CLAUDE.md files are a hybrid of reference + how-to -- that's fine for repo instructions
 - Prefer editing existing docs over creating new ones
-- Check for existing docs before writing — don't create duplicates
+- Check for existing docs before writing -- don't create duplicates
+
+## Cross-references
+
+Claude Code counterpart: `/docs`
