@@ -1,24 +1,25 @@
 #!/usr/bin/env bash
-# Pre-push: full validation of encrypted secrets
+# Pre-push: validate skills (plaintext) and workspace secrets (encrypted)
 set -euo pipefail
 
-echo "Validating encrypted secrets..."
+echo "Validating skills and secrets..."
 
 errors=0
 
-# Expected skill files
-for skill in delegation docs linear-operations memory-management morning-briefing \
-             notification-routing pr-review self-improvement skill-management system-health; do
-  if [ ! -f "secrets/skill-${skill}.age" ]; then
-    echo "ERROR: secrets/skill-${skill}.age is missing"
+# Expected plaintext skill directories
+for skill in delegation dep-update docs linear-operations memory-management \
+             morning-briefing notification-routing onboard pr-review repo-sync \
+             self-improvement skill-management system-health test-write; do
+  if [ ! -f "skills/${skill}/SKILL.md" ]; then
+    echo "ERROR: skills/${skill}/SKILL.md is missing"
     errors=$((errors + 1))
-  elif [ ! -s "secrets/skill-${skill}.age" ]; then
-    echo "ERROR: secrets/skill-${skill}.age is empty"
+  elif [ ! -s "skills/${skill}/SKILL.md" ]; then
+    echo "ERROR: skills/${skill}/SKILL.md is empty"
     errors=$((errors + 1))
   fi
 done
 
-# Expected workspace files
+# Expected encrypted workspace files
 for file in AGENTS IDENTITY SOUL TOOLS USER; do
   if [ ! -f "secrets/workspace-${file}.age" ]; then
     echo "ERROR: secrets/workspace-${file}.age is missing"
