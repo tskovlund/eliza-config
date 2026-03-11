@@ -25,6 +25,7 @@ Run a comprehensive health check on miles and report the results.
 Report as a compact summary. Lead with problems if any exist.
 
 If everything is healthy:
+
 ```
 miles: all good
 Uptime 42d. Disk 45%. Mem 1.2/4 GB. 8 services running.
@@ -32,6 +33,7 @@ Last backup: 6h ago. No errors in 24h.
 ```
 
 If something is wrong:
+
 ```
 miles: ATTENTION
 

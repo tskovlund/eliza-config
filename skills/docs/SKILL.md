@@ -13,24 +13,28 @@ Write and structure documentation using the Diataxis framework. Thomas prefers w
 All documentation should map to one of these four types:
 
 ### Tutorials (Learning-oriented)
+
 - **Purpose**: Help a newcomer get started
 - **Style**: Step-by-step, hand-holding, "follow along"
 - **Example**: "Setting up the dev environment from scratch"
 - **Verb**: Learn
 
 ### How-to Guides (Task-oriented)
+
 - **Purpose**: Help someone accomplish a specific goal
 - **Style**: Practical steps, assumes some knowledge
 - **Example**: "How to add a new NixOS module"
 - **Verb**: Do
 
 ### Reference (Information-oriented)
+
 - **Purpose**: Describe the system accurately and completely
 - **Style**: Dry, factual, comprehensive
 - **Example**: "Configuration options for zeroclaw.nix"
 - **Verb**: Look up
 
 ### Explanation (Understanding-oriented)
+
 - **Purpose**: Explain why things work the way they do
 - **Style**: Discursive, contextual, big-picture
 - **Example**: "Why we use declarative deployment for skills"
@@ -38,12 +42,12 @@ All documentation should map to one of these four types:
 
 ## Identifying the type
 
-| Reader's mode | They need | Type |
-|---------------|-----------|------|
-| Learning a new skill | A guided experience | **Tutorial** |
-| Trying to get something done | Steps to follow | **How-to guide** |
-| Looking up specific info | Facts and descriptions | **Reference** |
-| Wanting to understand | Context and reasoning | **Explanation** |
+| Reader's mode                | They need              | Type             |
+| ---------------------------- | ---------------------- | ---------------- |
+| Learning a new skill         | A guided experience    | **Tutorial**     |
+| Trying to get something done | Steps to follow        | **How-to guide** |
+| Looking up specific info     | Facts and descriptions | **Reference**    |
+| Wanting to understand        | Context and reasoning  | **Explanation**  |
 
 ## Writing Guidelines
 
@@ -74,23 +78,35 @@ One-line summary of what this document covers.
 ## [Sections appropriate to the doc type]
 
 ### For tutorials:
+
 ## Prerequisites
+
 ## Step 1: ...
+
 ## Step 2: ...
+
 ## What you've learned
 
 ### For how-to guides:
+
 ## Problem/Goal
+
 ## Steps
+
 ## Troubleshooting
 
 ### For reference:
+
 ## Overview
+
 ## [Organized by topic/API/module]
 
 ### For explanation:
+
 ## Context
+
 ## [Discussion sections]
+
 ## Summary
 ```
 

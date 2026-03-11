@@ -22,6 +22,7 @@ Capture what matters. Decisions, context, things to remember.
 Skip secrets unless asked to keep them.
 
 ### Write It Down — No Mental Notes!
+
 - Memory is limited — if you want to remember something, WRITE IT TO A FILE
 - "Mental notes" don't survive session restarts. Files do.
 - When someone says "remember this" -> update daily file or MEMORY.md

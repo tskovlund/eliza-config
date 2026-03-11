@@ -14,19 +14,23 @@ Reflect on interactions, identify patterns, and continuously improve skills, con
 Stay alert for improvement opportunities during normal work:
 
 **After completing a task:** Did I follow a repeatable workflow that isn't yet a skill?
+
 - Multi-step process I'd do the same way next time
 - Conventions from config that could be loaded on demand
 - Specific tools in a specific order
 
 **After struggling with a task:** Would a skill have helped?
+
 - Had to search for conventions that should be readily available
 - Made a mistake that instructions would have prevented
 
 **When updating config:** Should this be a skill instead?
+
 - Config = always loaded (every token counts)
 - Skills = loaded on demand (better for reference material and workflows)
 
 **When a skill's instructions didn't match reality:**
+
 - A command, tool, or API changed behavior
 - A step failed in a real scenario
 - A better approach was discovered
@@ -42,25 +46,30 @@ Stay alert for improvement opportunities during normal work:
 ### 2. Identify improvement areas
 
 **Skill gaps**: Did I lack a skill for something Thomas asked?
+
 - If yes: draft a new skill and propose it
 - Use the skill-management skill for the creation workflow
 
 **Config issues**: Was I blocked by a config limitation?
+
 - Autonomy restrictions that caused friction
 - Missing tools in PATH
 - Missing integrations
 
 **Communication**: Did I over-explain, under-explain, or miss the tone?
+
 - Check SOUL.md preferences
 - Adjust behavior, update AGENTS.md if the lesson is durable
 
 **Efficiency**: Could I have done something faster?
+
 - Tasks that could be parallelized via delegation
 - Repeated manual steps that should be automated (cron jobs)
 
 ### 3. Infrastructure healing
 
 Watch for and fix:
+
 - Stale symlinks after skill renames (hot reload handles this)
 - Missing skills after deploy -- check that the skill exists in the repo
 - Skills that reference removed files, renamed commands, or outdated conventions
@@ -68,6 +77,7 @@ Watch for and fix:
 ### 4. Skill sync awareness
 
 When updating a skill, check if the counterpart on the other platform needs updating too:
+
 - Eliza skills live in `eliza-config/skills/`
 - Claude Code skills live in `nix-config-personal/skills/`
 - They cover the same workflows but with platform-specific details

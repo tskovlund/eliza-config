@@ -11,14 +11,14 @@ Spawn and coordinate sub-agents for complex tasks. Two delegation mechanisms: Ze
 
 ## Choosing the right mechanism
 
-| Task | Use | Why |
-|------|-----|-----|
-| Write code, fix bugs, create PRs | Claude Code | Deep repo understanding, file editing, git |
-| Research, lookups, API calls | ZeroClaw delegate | Lighter weight, faster startup |
-| Code review | Claude Code | Needs full codebase context |
-| Summarize, format, translate | ZeroClaw delegate | Simple text processing |
-| Multi-file refactoring | Claude Code | Complex, needs persistence |
-| System health, monitoring | ZeroClaw delegate | Shell commands only |
+| Task                             | Use               | Why                                        |
+| -------------------------------- | ----------------- | ------------------------------------------ |
+| Write code, fix bugs, create PRs | Claude Code       | Deep repo understanding, file editing, git |
+| Research, lookups, API calls     | ZeroClaw delegate | Lighter weight, faster startup             |
+| Code review                      | Claude Code       | Needs full codebase context                |
+| Summarize, format, translate     | ZeroClaw delegate | Simple text processing                     |
+| Multi-file refactoring           | Claude Code       | Complex, needs persistence                 |
+| System health, monitoring        | ZeroClaw delegate | Shell commands only                        |
 
 ## Claude Code headless
 
@@ -76,6 +76,7 @@ wait
 ### Parsing results
 
 When using `--output-format json`, the output contains:
+
 ```json
 {
   "result": "The task output text",
@@ -103,11 +104,11 @@ delegate:
 
 ### Model routing
 
-| Task type | Model |
-|-----------|-------|
-| Simple lookups, formatting | claude-haiku-4-5 |
-| Code review, writing, analysis | claude-sonnet-4-6 |
-| Architecture, complex reasoning | claude-opus-4-6 |
+| Task type                       | Model             |
+| ------------------------------- | ----------------- |
+| Simple lookups, formatting      | claude-haiku-4-5  |
+| Code review, writing, analysis  | claude-sonnet-4-6 |
+| Architecture, complex reasoning | claude-opus-4-6   |
 
 ## Delegation principles
 
@@ -120,25 +121,32 @@ delegate:
 ## Orchestration patterns
 
 ### PR workflow (most common)
+
 1. Spawn Claude Code in the target repo
 2. Task: read issue → branch → implement → test → PR → review loop
 3. Report PR URL back to Thomas via Telegram
 
 ### Parallel review
+
 Spawn multiple delegates with different focuses:
+
 - Delegate 1: correctness and logic
 - Delegate 2: security and edge cases
 - Delegate 3: style and maintainability
 
 ### Pipeline
+
 Chain steps sequentially:
+
 1. Research (ZeroClaw delegate) → gather context
 2. Plan (ZeroClaw delegate) → design approach
 3. Implement (Claude Code) → write code
 4. Review (Claude Code) → validate
 
 ### Multi-repo coordination
+
 For changes spanning repos:
+
 1. Spawn Claude Code per repo (parallel)
 2. Collect results
 3. Coordinate cross-repo dependencies (e.g., deploy order)
@@ -146,6 +154,7 @@ For changes spanning repos:
 ## Reporting results
 
 After a delegate completes:
+
 - Summarize what was done (1-3 lines)
 - Link to artifacts (PR URL, commit SHA)
 - Flag anything that needs Thomas's attention

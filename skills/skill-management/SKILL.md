@@ -45,15 +45,19 @@ Follow this structure:
 One-line description.
 
 ## When to use
+
 - Trigger conditions
 
 ## Steps
+
 1. Concrete instructions
 
 ## Output format
+
 How to present results
 
 ## Notes
+
 - Context details
 ```
 
@@ -71,6 +75,7 @@ Follow `skill-<topic>-<action>` or `skill-<topic>` pattern. Group related skills
 ### Quality checklist
 
 Before committing, verify:
+
 - [ ] SKILL.md exists and is non-empty
 - [ ] Has clear "When to use" section with trigger phrases
 - [ ] Steps are concrete (actual commands, not hand-wavy instructions)
@@ -100,6 +105,7 @@ touch /var/lib/zeroclaw/.zeroclaw/redeploy-trigger
 ```
 
 A systemd path unit watches for this file. When created, it:
+
 1. Pulls the latest from your local clone
 2. Copies skills and workspace files to the workspace (replacing Nix store symlinks)
 3. Restarts ZeroClaw to pick up changes
@@ -117,10 +123,12 @@ Wait ~5 seconds, then verify the change is live by reading the deployed skill fi
 ## When to consider new skills
 
 **After completing a task:** Did I follow a repeatable workflow that isn't yet a skill?
+
 - Multi-step process I'd do the same way next time
 - Specific tools in a specific order
 
 **After struggling with a task:** Would a skill have helped?
+
 - Had to search for conventions that should be readily available
 - Made a mistake that instructions would have prevented
 
@@ -138,6 +146,7 @@ Obvious, low-risk fixes: apply and mention. Behavior-changing fixes: propose fir
 ## Workspace files
 
 Workspace files (SOUL.md, IDENTITY.md, etc.) follow the same workflow:
+
 1. Edit in the clone under `workspace/`
 2. Commit, push, trigger reload
 

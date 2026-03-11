@@ -27,6 +27,7 @@ Store and recall decisions, preferences, findings, and lessons learned. Maintain
    - **Always use this for durable knowledge** -- don't duplicate in brain.db
 
 ### Files
+
 - **MEMORY.md** -- Curated highlights (auto-injected into system prompt)
 - **memory/YYYY-MM-DD.md** -- Daily raw logs
 
@@ -130,6 +131,7 @@ curl -s -X POST http://localhost:8765/mcp \
 ## MEMORY.md updates
 
 MEMORY.md is special -- it's in your system prompt every session. Only put things there that are:
+
 - Referenced frequently across sessions
 - Core facts about Thomas, projects, or infrastructure
 - Durable decisions that affect daily behavior

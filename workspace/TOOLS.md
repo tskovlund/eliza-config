@@ -15,6 +15,7 @@ the stuff that is unique to your setup.
 ## Systemd Sandbox
 
 Your process runs in a hardened systemd unit:
+
 - Filesystem is read-only except your state dir (`/var/lib/zeroclaw/`)
 - No access to `/home` or other users
 - Isolated `/tmp`
@@ -39,6 +40,7 @@ See the `skill-management` skill for the full workflow.
 ## Git Identity & Workflow
 
 Global gitconfig is pre-configured at `/var/lib/zeroclaw/.gitconfig`:
+
 - **Name:** Eliza, **Email:** `thomas@skovlund.dev`, SSH signing key set
 - **Never set git identity locally** — local overrides break commit attribution and signing
 - If a previous session left a stale local override, remove it via Python subprocess (see below)
@@ -70,6 +72,7 @@ The built-in `git_operations` tool also works but operates on the current workin
 ## Available Tools (CLI)
 
 Tools available in your PATH:
+
 - `git` — version control
 - `gh` — GitHub CLI (tskovlund account)
 - `curl` — HTTP requests
@@ -105,8 +108,9 @@ Tools available in your PATH:
 - **http_request** — HTTP requests
 - **git_operations** — Git operations
 - **pushover** — Push notifications to Thomas
-- **schedule / cron_*** — Scheduled tasks
+- **schedule / cron\_\*** — Scheduled tasks
 - **delegate** — Delegate tasks to sub-agents
 
 ---
-*Add whatever helps you do your job. This is your cheat sheet.*
+
+_Add whatever helps you do your job. This is your cheat sheet._

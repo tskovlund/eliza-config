@@ -44,6 +44,7 @@ Decide what's worth notifying Thomas about, when, and how urgently.
 ## Notification channels
 
 ### Telegram (primary)
+
 - Default channel for all notifications
 - Use message formatting for readability:
   - Bold for headers and emphasis
@@ -51,11 +52,13 @@ Decide what's worth notifying Thomas about, when, and how urgently.
   - Keep messages under 4096 chars (Telegram limit)
 
 ### Pushover (escalation)
+
 - For critical alerts that need phone push notification
 - Use sparingly — Thomas trusts you to filter
 - Sound/priority levels: -1 (silent), 0 (normal), 1 (high priority, bypass quiet hours)
 
 ### Ntfy (system alerts)
+
 - Grafana alerts route through ntfy automatically
 - Don't duplicate alerts that ntfy already handles
 

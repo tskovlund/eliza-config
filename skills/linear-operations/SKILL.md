@@ -37,11 +37,20 @@ Content-Type: application/json
 
 ```graphql
 {
-  issues(filter: {
-    team: { id: { eq: "4931919c-2b49-4bd0-b316-005f8bd66554" } }
-    state: { name: { in: ["In Progress", "Todo"] } }
-  }) {
-    nodes { identifier title state { name } priority }
+  issues(
+    filter: {
+      team: { id: { eq: "4931919c-2b49-4bd0-b316-005f8bd66554" } }
+      state: { name: { in: ["In Progress", "Todo"] } }
+    }
+  ) {
+    nodes {
+      identifier
+      title
+      state {
+        name
+      }
+      priority
+    }
   }
 }
 ```
@@ -50,15 +59,20 @@ Content-Type: application/json
 
 ```graphql
 mutation {
-  issueCreate(input: {
-    teamId: "4931919c-2b49-4bd0-b316-005f8bd66554"
-    title: "Issue title"
-    description: "Description"
-    priority: 2
-    stateId: "<state-id>"
-  }) {
+  issueCreate(
+    input: {
+      teamId: "4931919c-2b49-4bd0-b316-005f8bd66554"
+      title: "Issue title"
+      description: "Description"
+      priority: 2
+      stateId: "<state-id>"
+    }
+  ) {
     success
-    issue { identifier url }
+    issue {
+      identifier
+      url
+    }
   }
 }
 ```
@@ -67,9 +81,7 @@ mutation {
 
 ```graphql
 mutation {
-  issueUpdate(id: "<issue-id>", input: {
-    stateId: "<new-state-id>"
-  }) {
+  issueUpdate(id: "<issue-id>", input: { stateId: "<new-state-id>" }) {
     success
   }
 }
@@ -79,10 +91,7 @@ mutation {
 
 ```graphql
 mutation {
-  commentCreate(input: {
-    issueId: "<issue-id>"
-    body: "Comment text"
-  }) {
+  commentCreate(input: { issueId: "<issue-id>", body: "Comment text" }) {
     success
   }
 }
@@ -95,42 +104,56 @@ Capture ideas and tasks for later. Route to the right tracker.
 ### Routing: GitHub Issues vs Linear
 
 **GitHub Issues** -- repo-specific implementation work:
+
 - Bugs, features, or tasks scoped to a single repo
 - Anything resolved by a PR in that repo
 - Create with: `gh issue create -R <owner>/<repo> --title "..." --body "..."`
 
 **Linear** -- everything else:
+
 - Cross-project planning, personal backlog, ideas not scoped to a repo
 - When both apply: create Linear issue, note that GitHub issue should be created when implementation starts
 
 ### When to auto-trigger
 
 **Create silently** -- intent to track is clear:
+
 - Explicit: "track this", "add to Linear", "create an issue", "defer this"
 - Contextual: "note to research X", "we should have X for Y"
 - Mid-conversation: Thomas names a concrete task to do later
 
 **Ask first** -- genuinely ambiguous:
+
 - Vague musings: "it would be nice if..."
 - Unsure which tracker is appropriate
 
 ### Triage vs shaped issue
 
 **Triage** (Triage status, Low priority) -- rough idea, needs scoping:
+
 ```markdown
 ## Idea
+
 [Core idea in 1-3 sentences]
+
 ## Context
+
 [What prompted this, relevant constraints]
 ```
 
 **Shaped** (Backlog status) -- clear scope, actionable:
+
 ```markdown
 ## Summary
+
 [What and why]
+
 ## Requirements
+
 - [ ] [Specific requirement]
+
 ## Acceptance criteria
+
 - [ ] [How to verify done]
 ```
 
@@ -195,6 +218,7 @@ For each item, assess:
 ### Output
 
 Prioritized list grouped by time horizon:
+
 - **Today (Urgent)** -- external deadlines, blocking issues
 - **This week (High)** -- compounding infrastructure, active momentum
 - **This month (Medium)** -- planned features, quality improvements
@@ -212,6 +236,7 @@ Prioritized list grouped by time horizon:
 ## Strategic context
 
 Thomas's goal is personal freedom. Prioritize:
+
 1. Things that **compound** (infrastructure, automation, reusable systems)
 2. Things that **ship** (products, visible output)
 3. Things that **unblock** other work

@@ -53,6 +53,7 @@ fd --type d --max-depth 2 --exclude .git --exclude node_modules --exclude __pyca
 ```
 
 Identify:
+
 - **Source layout:** src/, lib/, app/, flat, or domain-driven
 - **Test layout:** tests/, co-located .test. files, or both
 - **Config:** package.json, pyproject.toml, Cargo.toml, etc.

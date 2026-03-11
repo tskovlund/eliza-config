@@ -48,19 +48,24 @@ That's it — no encryption step needed for skills.
 One-line description of what this skill does.
 
 ## When to use
+
 - Trigger conditions (user says X, scheduled at Y, after Z happens)
 
 ## Steps
+
 1. Concrete, actionable instructions
 2. With specific commands and expected outputs
 
 ## Output format
+
 How to present results (compact for Telegram, emoji for scanning, etc.)
 
 ## Notes
+
 - Context-specific details (runs on miles, Telegram delivery, etc.)
 
 ## Cross-references
+
 - Claude Code counterpart: `/skill-name` (if one exists)
 ```
 

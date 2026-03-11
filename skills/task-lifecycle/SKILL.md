@@ -120,6 +120,7 @@ claude -p "<follow-up prompt>" --resume <session-id> --output-format json
 ```
 
 The resumed session has full context from the previous run. Use this for:
+
 - Feeding back AC verification failures
 - Requesting additional changes after review
 - Continuing work after a timeout
@@ -131,6 +132,7 @@ The resumed session has full context from the previous run. Use this for:
 Default timeout: 1 hour (3600s) for normal tasks. For large refactors, extend to 2 hours.
 
 If a session times out:
+
 1. Update registry: `status: "timed_out"`
 2. Check if the session made partial progress (commits, PR created)
 3. If partial progress: resume with a focused prompt on remaining work

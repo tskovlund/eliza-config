@@ -15,6 +15,7 @@ Full pull request lifecycle: create a PR, review it, address feedback, iterate u
    - Ensure the branch is pushed: `git push -u origin <branch>`
 
 2. **Create the PR**:
+
    ```
    gh pr create --title "<type>(<scope>): <description>" --body "## Summary\n\n<bullets>\n\n## Test plan\n\n<checkboxes>\n\n## Related issues\n\n<links>"
    ```
@@ -87,6 +88,7 @@ For significant PRs, delegate review to fresh-context sub-agents:
 **Every comment gets an explicit reply** -- an unaddressed comment looks identical to an ignored comment.
 
 For each comment, do BOTH:
+
 1. **Act on it**: Fix the code, or decline with an explanation
 2. **Reply on GitHub**:
    ```sh
